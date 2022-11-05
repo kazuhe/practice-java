@@ -8,6 +8,12 @@ public class Maze {
     // z: 下
     // a: 左
     // s: 右
+
+    /**
+     * メモのサンプル
+     * @param args コマンドライン引数
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         record Position(int x, int y) {}
         int[][] map = {
