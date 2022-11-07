@@ -25,15 +25,16 @@ public class DiffSampleInherit {
      * これは「テンプレートパターン」と呼ばれるデザインパターン
      * Gof のデザインパターン（継承の使い方を中心にクラスの設計手法をまとめたパターン集）とも呼ばれている
      */
-    static abstract class ImageDrawer {
-        BufferedImage createImage() {
+    @FunctionalInterface
+     interface ImageDrawer {
+        default BufferedImage createImage() {
             var image = new BufferedImage(250, 200, BufferedImage.TYPE_INT_RGB);
             var graphics = image.createGraphics();
             draw(graphics);
             return image;
         }
 
-        abstract void draw(Graphics2D g);
+        void draw(Graphics2D g);
     }
 
 //    static class LineDrawer extends ImageDrawer {
@@ -50,17 +51,21 @@ public class DiffSampleInherit {
           上記のコメントは ImageDrawer を継承しているが、
           他に利用しない場合は匿名クラスが利用できる
          */
-        return new ImageDrawer() {
-            @Override
-            void draw(Graphics2D g) {
-                g.drawLine(10, 10, 220, 180);
-            }
-        }.createImage();
+//        return new ImageDrawer() {
+//            @Override
+//            public void draw(Graphics2D g) {
+//                g.drawLine(10, 10, 220, 180);
+//            }
+//        }.createImage();
+
+        /* 実装する必要のある抽象メソッドが 1 つだけなので匿名クラスをラムダ式に変更する */
+        ImageDrawer drawer = g -> g.drawLine(10, 10, 220, 180);
+        return drawer.createImage();
     }
 
-    static class RectDrawer extends ImageDrawer {
+    static class RectDrawer implements ImageDrawer {
         @Override
-        void draw(Graphics2D g) {
+        public void draw(Graphics2D g) {
             g.drawRect(10, 10, 220, 180);
         }
     }
